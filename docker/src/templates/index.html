@@ -1,0 +1,506 @@
+{% extends "base.html" %}
+{% block head_title %}Hydra - Social Media Monitoring Framework{% endblock head_title %}
+{% block extra_head %}
+{% endblock %}
+{% block content %}
+
+
+          <div class="content-i">
+            <div class="content-box">
+              <div class="os-tabs-w">
+                <div class="os-tabs-controls os-tabs-complex">
+                  <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                      <a aria-expanded="false" class="nav-link active" data-toggle="tab" href="#tab_overview"><span class="tab-label">Your Portfolio</span><span class="badge badge-success"><i class="os-icon os-icon-arrow-up6"></i><span>22%</span></span></a>
+                    </li>
+                    </li>
+                    <li class="nav-item nav-actions d-none d-sm-block">
+                      <a class="btn btn-grey" href="#"><i class="os-icon os-icon-plus-circle"></i><span>Add Keyword</span></a>
+                    </li>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 col-lg-8 col-xxl-6">
+                  <div class="element-balances justify-content-between mobile-full-width">
+                    <div class="balance balance-v2">
+                      <div class="balance-title">
+                        Your Crawled Posts
+                      </div>
+                      <div class="balance-value">
+                        <span class="d-xxl-none">{{ crawled_count.total_count }}</span><span class="d-none d-xxl-inline-block">{{ crawled_count.total_count }}</span> <!--<span class="trending trending-down-basic"><span>%12</span><i class="os-icon os-icon-arrow-2-down"></i></span>-->
+                      </div>
+                    </div>
+                    <div class="balance-table pl-sm-2">
+                      <table class="table table-lightborder table-bordered table-v-compact mb-0">
+                        <tr>
+
+						{% for source in crawled_count.first_part %}
+                          <td>
+                            <strong>{{ source.count }}</strong>
+                            <div class="balance-label smaller lighter text-nowrap">
+                              {{ source.source }}
+                            </div>
+                          </td>
+
+							{% endfor %}
+
+                        </tr>
+                        <tr>
+
+                          {% for source in crawled_count.second_part %}
+                          <td>
+                            <strong>{{ source.count }}</strong>
+                            <div class="balance-label smaller lighter text-nowrap">
+                              {{ source.source }}
+                            </div>
+                          </td>
+
+							{% endfor %}
+
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="element-wrapper pb-4 mb-4 border-bottom">
+                    <div class="element-box-tp">
+                      <a class="btn btn-primary" href="#"><i class="os-icon os-icon-refresh-ccw"></i><span>Update Crawlers</span></a>
+                    </div>
+                  </div>
+                  <div class="element-wrapper compact">
+                    <div class="element-box-tp">
+                      <div class="element-actions d-none d-sm-block">
+                        <form class="form-inline justify-content-sm-end">
+                          <label class="smaller" for="">Show Period:</label><select class="form-control form-control-sm form-control-faded">
+                            <option selected="true">
+                              Last 30 days
+                            </option>
+                            <option>
+                              This Week
+                            </option>
+                            <option>
+                              This Month
+                            </option>
+                            <option>
+                              Today
+                            </option>
+                          </select>
+                        </form>
+                      </div>
+                      <h6 class="element-box-header">
+                        Crawler Statistics
+                      </h6>
+                      <div class="el-chart-w">
+                        <canvas data-chart-data="" height="50" id="liteLineChartV3" width="300"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-2 d-none d-xxl-block">
+                  <div class="element-box less-padding">
+                    <h6 class="element-box-header text-center">
+                      Source Distribution
+                    </h6>
+                    <div class="el-chart-w">
+                      <canvas height="120" id="donutChart1" width="120"></canvas>
+                      <div class="inside-donut-chart-label">
+                        <strong>72.25</strong><span>Lakhs</span>
+                      </div>
+                    </div>
+                    <div class="el-legend condensed">
+                      <div class="row">
+                        <div class="col-auto col-xxxxl-6 ml-sm-auto mr-sm-auto">
+                          <div class="legend-value-w">
+                            <div class="legend-pin legend-pin-squared" style="background-color: #6896f9;"></div>
+                            <div class="legend-value">
+                              <span>Twitter</span>
+                              <div class="legend-sub-value">
+                                17%
+                              </div>
+                            </div>
+                          </div>
+                          <div class="legend-value-w">
+                            <div class="legend-pin legend-pin-squared" style="background-color: #85c751;"></div>
+                            <div class="legend-value">
+                              <span>Youtube</span>
+                              <div class="legend-sub-value">
+                                22%
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 d-none d-xxxxl-block">
+                          <div class="legend-value-w">
+                            <div class="legend-pin legend-pin-squared" style="background-color: #806ef9;"></div>
+                            <div class="legend-value">
+                              <span>Facebook</span>
+                              <div class="legend-sub-value">
+                                3%
+                              </div>
+                            </div>
+                          </div>
+                          <div class="legend-value-w">
+                            <div class="legend-pin legend-pin-squared" style="background-color: #d97b70;"></div>
+                            <div class="legend-value">
+                              <span>Tumblr</span>
+                              <div class="legend-sub-value">
+                                15%
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 d-none d-lg-block">
+                  <div class="cta-w cta-with-media purple">
+                    <div class="cta-content">
+                      <div class="highlight-header">
+                        Today's WordCloud
+                      </div>
+                      <h3 id="word1" class="cta-header">
+                        Kashmir
+                      </h3>
+                      <p><strong id="word2"></strong></p>
+                      <span id="word3"></span>
+                      <h3><strong id="word4"></strong></h3>
+                      <h2><strong id="word5"></strong></h2>
+                      <span id="word6"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row pt-2">
+				{% for post in posts_count %}
+                <div class="col-6 col-sm-3 col-xxl-2">
+                  <a class="element-box el-tablo centered trend-in-corner smaller" href="#">
+                    <div class="label">
+                      {{ post.source }}
+                    </div>
+                    <div class="value">
+                      {{ post.count }}
+                    </div>
+                    <div class="trending trending-up">
+                      <span>{{ post.percent }}</span><i class="os-icon os-icon-arrow-up6"></i>
+                    </div>
+                  </a>
+                </div>
+				 {% endfor %}
+
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="element-wrapper compact pt-4">
+                    <div class="element-actions d-none d-sm-block">
+                    </div>
+                    <h6 class="element-header">
+                      Top Influencer for Today
+                    </h6>
+                    <div class="element-box-tp">
+                      <div class="inline-profile-tiles">
+                        <div class="row">
+
+							{% for influencer in top_influencer %}
+
+								<div class="col-4 col-sm-3 col-xxl-2">
+									<div class="profile-tile profile-tile-inlined">
+									  <a class="profile-tile-box" href="users_profile_small.html">
+										<div class="pt-avatar-w">
+										  <img alt="" src="{{ influencer.image }}">
+										</div>
+										<div  class="pt-user-name">
+											{{ influencer.name }}
+										</div>
+									  </a>
+									</div>
+							    </div>
+
+							{% endfor %}
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="element-wrapper compact pt-4">
+                    <div class="element-actions d-none d-sm-block">
+                    </div>
+                    <h6 class="element-header">
+                      Top Mentions for Today
+                    </h6>
+                    <div class="element-box-tp">
+                      <div class="inline-profile-tiles">
+                        <div class="row">
+
+							{% for mentions in top_mentions %}
+
+								<div class="col-4 col-sm-3 col-xxl-2">
+								<div class="profile-tile profile-tile-inlined">
+								  <a class="profile-tile-box" href="users_profile_small.html">
+									<div class="pt-avatar-w">
+									  <img alt="" src="{{mentions.image}}">
+									</div>
+									<div class="pt-user-name">
+									  {{ mentions.name }}
+									</div>
+								  </a>
+								</div>
+							  </div>
+
+							{% endfor %}
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                    <div class="col-sm-6">
+                      <div class="element-wrapper compact pt-4">
+                        <div class="element-actions d-none d-sm-block">
+                          <form class="form-inline justify-content-sm-end">
+                            <label class="smaller" for="">Stories For</label><select class="form-control form-control-sm form-control-faded">
+                              <option value="Active">
+                                All
+                              </option>
+                              <option value="Pending">
+                                Kashmir
+                              </option>
+                              <option value="Cancelled">
+                                Pakistan
+                              </option>
+                              <option value="Cancelled">
+                                China
+                              </option>
+
+                            </select>
+                          </form>
+                        </div>
+                        <h6 class="element-header">
+                          Social Media Themes
+                        </h6>
+                        <div style="height: 500px; overflow-y: scroll;">
+                        <div class="element-box-tp">
+
+
+
+							{% for theme in themes %}
+								<div class="post-box">
+									<div class="post-media" style="background-image: url(/static/img/portfolio1.jpg)"></div>
+
+									<div class="post-content">
+									  <h6 id="heading" class="post-title">
+											{{ theme.heading }}
+									  </h6>
+									  <div id="content" class="post-text">
+											{{ theme.content }}
+									  </div>
+									  <div class="post-foot">
+										<div class="post-tags">
+										  <div id="badge1" class="badge badge-primary">
+												{{ theme.badge.0 }}
+										  </div>
+										  <div id="badge2" class="badge badge-primary">
+											  	{{ theme.badge.1 }}
+										  </div>
+										</div>
+										<a class="post-link" href="#"><span>Read Full Story</span><i class="os-icon os-icon-arrow-right7"></i></a>
+									  </div>
+									</div>
+								  </div>
+							{% endfor %}
+
+
+
+						</div>
+                        </div>
+                          <a class="centered-load-more-link" href="#"><span>See all stories</span></a>
+
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+						<div style="height: 600px; overflow-y: scroll;">
+
+                      <div class="element-box">
+                        <h6 class="element-header">
+                          Important Events
+                        </h6>
+                        <div class="timed-activities compact">
+
+							{% for day in events %}
+								<div class="timed-activity">
+									<div class="ta-date">
+									  <span> {{ day.date }} </span>
+									</div>
+									<div class="ta-record-w">
+										{% for event in day.events %}
+											  <div class="ta-record">
+												<div class="ta-timestamp">
+												  <strong> {{ event.time }} </strong> am
+												</div>
+												<div class="ta-activity">
+												  {{ event.content }}
+												</div>
+											  </div>
+										{% endfor %}
+									</div>
+                          		</div>
+						    {% endfor %}
+
+                        </div>
+                      </div>
+                       <a class="centered-load-more-link" href="#"><span>See all Events</span></a>
+                    </div>
+					</div>
+
+
+                  <div class="col-sm-4">
+                    <div class="element-wrapper compact pt-12">
+                      <div class="element-actions d-none d-sm-block">
+                      </div>
+                      <h6 class="element-header">
+                        Top Hashtags
+                      </h6>
+                    <div class="col-12 d-sm-none d-xxl-block col-xxl-12">
+                      <div class="cta-w orange text-center">
+                        <div class="cta-content extra-padded">
+                          <div class="highlight-header">
+                            Hashtags
+                          </div>
+                          <h5 class="cta-header">
+                           #gobacksimon
+                          </h5>
+                        </div>
+                      </div>
+                    </div> </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="element-wrapper compact pt-12">
+                      <div class="element-actions d-none d-sm-block">
+                      </div>
+                      <h6 class="element-header">
+                        Top Locations
+                      </h6>
+                    <div class="col-12 d-sm-none d-xxl-block col-xxl-12">
+                      <div class="cta-w purple text-center">
+                        <div class="cta-content extra-padded">
+                          <div class="highlight-header">
+                            Locations
+                          </div>
+                          <h5 class="cta-header">
+                           pulwama
+                          </h5>
+                        </div>
+                      </div>
+                    </div> </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="element-wrapper compact pt-12">
+                      <div class="element-actions d-none d-sm-block">
+                      </div>
+                      <h6 class="element-header">
+                        Top News Headlines
+                      </h6>
+                    <div class="col-12 d-sm-none d-xxl-block col-xxl-12">
+                      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                        </ol>
+                        <div class="carousel-inner">
+
+							{% for headline in headlines %}
+								{% if forloop.first %}
+									<div class="carousel-item active">
+								{% else %}
+									<div class="carousel-item">
+								{% endif %}
+								<div class="post-box">
+									<div class="post-media" style="background-image: url(/static/img/portfolio1.jpg)"></div>
+									<div class="post-content">
+									  <h6 class="post-title">
+											{{ headline.heading }}
+									  </h6>
+									  <div class="post-text">
+											{{ headline.content }}
+									  </div>
+									  <div class="post-foot">
+										<div class="post-tags">
+										  <div class="badge badge-primary">
+												{{ headline.badge.0 }}
+										  </div>
+										  <div class="badge badge-primary">
+											  	{{ headline.badge.1 }}
+										  </div>
+										</div>
+										<a class="post-link" href="#"><span>Read Full Story</span><i class="os-icon os-icon-arrow-right7"></i></a>
+									  </div>
+									</div>
+								  </div>
+							</div>
+							{% endfor %}
+
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="sr-only">Next</span>
+                        </a>
+                      </div>
+                    </div>
+                    </div>
+                  </div>
+
+
+              <!--------------------
+              End - Container
+              -------------------->
+                </div>
+              </div>
+              <!--------------------
+              START - Color Scheme Toggler
+              -------------------->
+              <div class="floated-colors-btn second-floated-btn">
+                <div class="os-toggler-w">
+                  <div class="os-toggler-i">
+                    <div class="os-toggler-pill"></div>
+                  </div>
+                </div>
+                <span>Dark </span><span>Colors</span>
+              </div>
+              <!--------------------
+              END - Color Scheme Toggler
+              -------------------->
+            </div>
+          </div>
+{% endblock content %}
+
+{% block js %}
+
+<script>
+        var data = "{{ graph_data }}"
+		$('#liteLineChartV3').attr("data-chart-data", data);
+</script>
+
+<script>
+var wordcloud_array = {{wordcloud_list|safe }};
+
+var element_id = ""
+var j = 0;
+for (i = 0; i < wordcloud_array.length; i++) {
+  j = i + 1;
+  element_id = "word" + j;
+  document.getElementById(element_id).innerHTML = wordcloud_array[i];
+}
+</script>
+
+
+{% endblock js %}
